@@ -2,35 +2,77 @@ using UnityEngine;
 
 public class PlayerMovement : MonoBehaviour
 {
-    public float moveSpeed = 5f; // Speed of the player ship
-    private Vector2 movement;   // Store the movement input
+    public float thrustForce = 5f;    // Forward/backward thrust strength
+    public float rotationSpeed = 200f; // Rotation speed of the ship
+    public float maxSpeed = 10f;      // Maximum speed limit
+    public float friction = 0.98f;    // Friction factor (closer to 1 = more slippery)
+
+    private Rigidbody2D rb;          // Rigidbody2D for physics-based movement
+    private Vector2 screenBounds;    // Calculated screen boundaries
+
+    void Start()
+    {
+        rb = GetComponent<Rigidbody2D>();
+        if (rb == null)
+        {
+            Debug.LogError("Rigidbody2D component missing from the Player object!");
+        }
+
+        // Calculate screen boundaries based on the camera's view
+        Camera cam = Camera.main;
+        Vector3 screenBottomLeft = cam.ViewportToWorldPoint(new Vector3(0, 0, cam.nearClipPlane));
+        Vector3 screenTopRight = cam.ViewportToWorldPoint(new Vector3(1, 1, cam.nearClipPlane));
+
+        // Store the horizontal and vertical limits
+        screenBounds = new Vector2(screenTopRight.x, screenTopRight.y);
+    }
 
     void Update()
     {
-        // Get input from WASD keys
-        movement.x = Input.GetAxisRaw("Horizontal"); // A/D or Left/Right
-        movement.y = Input.GetAxisRaw("Vertical");   // W/S or Up/Down
+        // Rotate the ship using A (left) and D (right)
+        float rotationInput = Input.GetAxisRaw("Horizontal"); // A/D keys or Left/Right arrow keys
+        transform.Rotate(0, 0, -rotationInput * rotationSpeed * Time.deltaTime); // Negative for clockwise rotation
 
-        // Rotate the ship to point in the direction of movement
-        if (movement != Vector2.zero) // Avoid rotating when no input is given
+        // Apply forward (W) or backward (S) thrust
+        if (Input.GetKey(KeyCode.W))
         {
-            float angle = Mathf.Atan2(movement.y, movement.x) * Mathf.Rad2Deg; // Get angle in degrees
-            transform.rotation = Quaternion.Euler(new Vector3(0, 0, angle - 90)); // Rotate to point forward
+            ApplyThrust(thrustForce); // Forward thrust
+        }
+        else if (Input.GetKey(KeyCode.S))
+        {
+            ApplyThrust(-thrustForce); // Backward thrust
         }
     }
 
     void FixedUpdate()
     {
-        // Normalize the movement vector to fix diagonal speed issue
-        Vector2 moveDirection = movement.normalized; // Normalize to make length = 1
+        // Apply friction-like effect
+        rb.velocity *= friction;
 
-        // Move the player ship
-        transform.Translate(moveDirection * moveSpeed * Time.fixedDeltaTime, Space.World);
+        // Limit the velocity to the max speed
+        rb.velocity = Vector2.ClampMagnitude(rb.velocity, maxSpeed);
 
-        // Clamp position within the screen bounds
-        Vector3 clampedPosition = transform.position;
-        clampedPosition.x = Mathf.Clamp(clampedPosition.x, -8f, 8f); // Adjust bounds
-        clampedPosition.y = Mathf.Clamp(clampedPosition.y, -4f, 4f); // Adjust bounds
-        transform.position = clampedPosition;
+        // Clamp the position to stay within screen bounds
+        ClampPositionToScreen();
+    }
+
+    void ApplyThrust(float force)
+    {
+        // Calculate the thrust force in the ship's forward direction
+        Vector2 thrustDirection = transform.up; // "Up" in Unity is the forward direction of the sprite
+        rb.AddForce(thrustDirection * force);
+    }
+
+    void ClampPositionToScreen()
+    {
+        // Get the current position
+        Vector3 position = transform.position;
+
+        // Clamp the position within the calculated screen bounds
+        position.x = Mathf.Clamp(position.x, -screenBounds.x, screenBounds.x);
+        position.y = Mathf.Clamp(position.y, -screenBounds.y, screenBounds.y);
+
+        // Apply the clamped position back to the transform
+        transform.position = position;
     }
 }

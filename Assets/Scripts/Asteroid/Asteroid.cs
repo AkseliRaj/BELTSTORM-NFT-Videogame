@@ -9,36 +9,44 @@ public class Asteroid : MonoBehaviour
         // Check if the asteroid is off-screen and destroy it
         if (IsOffScreen())
         {
-            Destroy(gameObject); // Destroy the asteroid
+            Destroy(gameObject);
         }
     }
 
     private bool IsOffScreen()
     {
-        // Get the screen bounds
         Vector3 screenPosition = Camera.main.WorldToViewportPoint(transform.position);
-        
-        // Check if the object is outside the screen bounds, including the buffer
         return screenPosition.x < -screenBoundsBuffer || screenPosition.x > 1 + screenBoundsBuffer ||
                screenPosition.y < -screenBoundsBuffer || screenPosition.y > 1 + screenBoundsBuffer;
     }
 
     void OnTriggerEnter2D(Collider2D collision)
     {
-        // Check if the asteroid was hit by a laser
         if (collision.CompareTag("Laser"))
         {
-            Destroy(gameObject); // Destroy the asteroid
-            Destroy(collision.gameObject); // Destroy the laser
+            Destroy(gameObject);
+            Destroy(collision.gameObject);
             Debug.Log("Asteroid destroyed by laser!");
         }
-
-        // Check if the asteroid hit the mothership
-        if (collision.CompareTag("Mothership"))
+        else if (collision.CompareTag("Player"))
         {
-            Debug.Log("Mothership hit by asteroid!");
-            Destroy(gameObject); // Destroy the asteroid
-            // Optionally, reduce mothership health or trigger game over
+            Debug.Log("Player hit by asteroid!");
+
+            // Get the PlayerHealth component and reduce health
+            PlayerHealth playerHealth = collision.GetComponent<PlayerHealth>();
+            if (playerHealth != null)
+            {
+                playerHealth.TakeDamage(1);
+            }
+
+            // Find the camera's Shake script and start the shake
+            Shake cameraShake = Camera.main.GetComponent<Shake>();
+            if (cameraShake != null)
+            {
+                cameraShake.start = true;
+            }
+
+            Destroy(gameObject);
         }
     }
 }

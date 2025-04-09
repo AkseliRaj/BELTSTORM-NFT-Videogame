@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
 
@@ -7,11 +5,17 @@ public class Timer : MonoBehaviour
 {
     [SerializeField] TextMeshProUGUI timerText;
     float elapsedTime;
-    private bool isTimerRunning = true; // Add a flag to control the timer
+    private bool isTimerRunning = true;
+
+    // Public property to allow other scripts to read the elapsed time.
+    public float ElapsedTime
+    {
+        get { return elapsedTime; }
+    }
 
     void Update()
     {
-        if (isTimerRunning) // Only update if the timer is running
+        if (isTimerRunning)
         {
             elapsedTime += Time.deltaTime;
             int minutes = Mathf.FloorToInt(elapsedTime / 60);
@@ -20,7 +24,6 @@ public class Timer : MonoBehaviour
         }
     }
 
-    // Public function to stop the timer
     public void StopTimer()
     {
         isTimerRunning = false;

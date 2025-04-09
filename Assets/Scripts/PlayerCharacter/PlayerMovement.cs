@@ -42,12 +42,6 @@ public class PlayerMovement : MonoBehaviour
         if (engineParticles != null && !engineParticles.isPlaying)
             engineParticles.Play();
     }
-    else if (Input.GetKey(KeyCode.S))
-    {
-        ApplyThrust(-thrustForce);
-        if (engineParticles != null && !engineParticles.isPlaying)
-            engineParticles.Play();
-    }
     else
     {
         // Optionally, stop the particle effect when not thrusting

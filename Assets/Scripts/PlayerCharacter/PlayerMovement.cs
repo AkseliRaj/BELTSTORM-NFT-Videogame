@@ -6,6 +6,8 @@ public class PlayerMovement : MonoBehaviour
     public float rotationSpeed = 200f; // Rotation speed of the ship
     public float maxSpeed = 10f;      // Maximum speed limit
     public float friction = 0.98f;    // Friction factor (closer to 1 = more slippery)
+    public ParticleSystem engineParticles;
+
 
     private Rigidbody2D rb;          // Rigidbody2D for physics-based movement
     private Vector2 screenBounds;    // Calculated screen boundaries
@@ -28,21 +30,32 @@ public class PlayerMovement : MonoBehaviour
     }
 
     void Update()
-    {
-        // Rotate the ship using A (left) and D (right)
-        float rotationInput = Input.GetAxisRaw("Horizontal"); // A/D keys or Left/Right arrow keys
-        transform.Rotate(0, 0, -rotationInput * rotationSpeed * Time.deltaTime); // Negative for clockwise rotation
+{
+    // Rotate the ship using A (left) and D (right)
+    float rotationInput = Input.GetAxisRaw("Horizontal");
+    transform.Rotate(0, 0, -rotationInput * rotationSpeed * Time.deltaTime);
 
-        // Apply forward (W) or backward (S) thrust
-        if (Input.GetKey(KeyCode.W))
-        {
-            ApplyThrust(thrustForce); // Forward thrust
-        }
-        else if (Input.GetKey(KeyCode.S))
-        {
-            ApplyThrust(-thrustForce); // Backward thrust
-        }
+    // Apply forward (W) or backward (S) thrust and handle particle effects
+    if (Input.GetKey(KeyCode.W))
+    {
+        ApplyThrust(thrustForce);
+        if (engineParticles != null && !engineParticles.isPlaying)
+            engineParticles.Play();
     }
+    else if (Input.GetKey(KeyCode.S))
+    {
+        ApplyThrust(-thrustForce);
+        if (engineParticles != null && !engineParticles.isPlaying)
+            engineParticles.Play();
+    }
+    else
+    {
+        // Optionally, stop the particle effect when not thrusting
+        if (engineParticles != null && engineParticles.isPlaying)
+            engineParticles.Stop();
+    }
+}
+
 
     void FixedUpdate()
     {

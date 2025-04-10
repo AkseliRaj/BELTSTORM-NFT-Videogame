@@ -11,8 +11,8 @@ public class LaserShooting : MonoBehaviour
 
     void Update()
     {
-        // Check for shooting input (Space key)
-        if (Input.GetKey(KeyCode.Space) && Time.time >= nextFireTime)
+        // Check for shooting input (Left Mouse Button)
+        if (Input.GetMouseButton(0) && Time.time >= nextFireTime)
         {
             ShootLaser();
             nextFireTime = Time.time + fireRate; // Set the next allowed fire time

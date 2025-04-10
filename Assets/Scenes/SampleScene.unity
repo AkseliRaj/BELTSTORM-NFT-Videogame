@@ -6143,8 +6143,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   asteroidPrefab: {fileID: 2960573689325806862, guid: acdf23aeb7f81ec44b0cdd9d6cdb913c, type: 3}
   playerCharacter: {fileID: 2160473130184437700}
-  spawnRate: 1.5
-  asteroidSpeed: 3
+  spawnRate: 1
+  asteroidSpeed: 5
   spawnRadius: 18
   timer: {fileID: 432614213}
 --- !u!4 &1872440197

@@ -21,25 +21,24 @@ public class Asteroid : MonoBehaviour
     }
 
     void OnTriggerEnter2D(Collider2D collision)
+{
+    if (collision.CompareTag("Laser"))
     {
-        if (collision.CompareTag("Laser"))
-        {
-            Destroy(gameObject);
-            Destroy(collision.gameObject);
-            Debug.Log("Asteroid destroyed by laser!");
-        }
-        else if (collision.CompareTag("Player"))
+        Destroy(gameObject);
+        Destroy(collision.gameObject);
+        Debug.Log("Asteroid destroyed by laser!");
+    }
+    else if (collision.CompareTag("Player"))
+    {
+        PlayerHealth playerHealth = collision.GetComponent<PlayerHealth>();
+
+        // Only damage and shake if player is not invincible
+        if (playerHealth != null && !playerHealth.IsInvincible())
         {
             Debug.Log("Player hit by asteroid!");
 
-            // Get the PlayerHealth component and reduce health
-            PlayerHealth playerHealth = collision.GetComponent<PlayerHealth>();
-            if (playerHealth != null)
-            {
-                playerHealth.TakeDamage(1);
-            }
+            playerHealth.TakeDamage(1);
 
-            // Find the camera's Shake script and start the shake
             Shake cameraShake = Camera.main.GetComponent<Shake>();
             if (cameraShake != null)
             {
@@ -49,4 +48,6 @@ public class Asteroid : MonoBehaviour
             Destroy(gameObject);
         }
     }
+}
+
 }

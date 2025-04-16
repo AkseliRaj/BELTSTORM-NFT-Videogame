@@ -7,7 +7,6 @@ TagManager:
   - Mothership
   - Laser
   - Asteroid
-  - PlayerHUD
   layers:
   - Default
   - TransparentFX

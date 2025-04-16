@@ -790,9 +790,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   asteroidPrefab: {fileID: 2960573689325806862, guid: acdf23aeb7f81ec44b0cdd9d6cdb913c, type: 3}
-  spawnInterval: 2
+  spawnInterval: 1.5
   asteroidSpeed: 3
-  spawnDistance: 5
+  spawnDistance: 10
 --- !u!4 &798464028
 Transform:
   m_ObjectHideFlags: 0
@@ -1340,7 +1340,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Quit
+  m_text: options
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 535c71cd4aab5bc4bbac9ec8a83a77f2, type: 2}
   m_sharedMaterial: {fileID: -8467446726527743553, guid: 535c71cd4aab5bc4bbac9ec8a83a77f2, type: 2}

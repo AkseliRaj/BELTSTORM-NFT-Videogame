@@ -77,7 +77,7 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_Sprite: {fileID: 21300000, guid: f53fad4b6e3cf2c4e9ab13a2391b6deb, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 41ed7b9556d7dab44bce4a77d5b22347, type: 3}
   m_Color: {r: 0.9760858, g: 1, b: 0, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -185,6 +185,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d1d3bea68626c3749a81d1e34efcc864, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  screenBoundsBuffer: 1
-  coinPrefab: {fileID: 4217507988290910147, guid: a5808a96d7ebebb48ab247b26f347439, type: 3}
+  maxHealth: 1
   isGolden: 1
+  coinPrefab: {fileID: 4217507988290910147, guid: a5808a96d7ebebb48ab247b26f347439, type: 3}
+  screenBoundsBuffer: 1

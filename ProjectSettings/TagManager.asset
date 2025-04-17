@@ -7,6 +7,7 @@ TagManager:
   - Mothership
   - Laser
   - Asteroid
+  - GoldenAsteroid
   layers:
   - Default
   - TransparentFX

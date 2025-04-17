@@ -1,53 +1,65 @@
-using UnityEngine;
+﻿using UnityEngine;
 
 public class Asteroid : MonoBehaviour
 {
-    public float screenBoundsBuffer = 1f; // Extra buffer to destroy asteroids off-screen
+    [Header("Health Settings")]
+    public int maxHealth = 1;        // Set to 3 on your normal prefab
+    private int currentHealth;
+
+    [Header("Coin Drop (goldens only)")]
+    public bool isGolden = false;    // Tick this on your golden prefab
+    public GameObject coinPrefab;    
+
+    [Header("Destroy Off‐Screen")]
+    public float screenBoundsBuffer = 1f;
+
+    void Start()
+    {
+        currentHealth = maxHealth;
+    }
 
     void Update()
     {
-        // Check if the asteroid is off-screen and destroy it
         if (IsOffScreen())
-        {
             Destroy(gameObject);
-        }
     }
 
     private bool IsOffScreen()
     {
-        Vector3 screenPosition = Camera.main.WorldToViewportPoint(transform.position);
-        return screenPosition.x < -screenBoundsBuffer || screenPosition.x > 1 + screenBoundsBuffer ||
-               screenPosition.y < -screenBoundsBuffer || screenPosition.y > 1 + screenBoundsBuffer;
+        Vector3 vp = Camera.main.WorldToViewportPoint(transform.position);
+        return vp.x < -screenBoundsBuffer || vp.x > 1 + screenBoundsBuffer
+            || vp.y < -screenBoundsBuffer || vp.y > 1 + screenBoundsBuffer;
     }
 
     void OnTriggerEnter2D(Collider2D collision)
-{
-    if (collision.CompareTag("Laser"))
     {
-        Destroy(gameObject);
-        Destroy(collision.gameObject);
-        Debug.Log("Asteroid destroyed by laser!");
-    }
-    else if (collision.CompareTag("Player"))
-    {
-        PlayerHealth playerHealth = collision.GetComponent<PlayerHealth>();
-
-        // Only damage and shake if player is not invincible
-        if (playerHealth != null && !playerHealth.IsInvincible())
+        if (collision.CompareTag("Laser"))
         {
-            Debug.Log("Player hit by asteroid!");
-
-            playerHealth.TakeDamage(1);
-
-            Shake cameraShake = Camera.main.GetComponent<Shake>();
-            if (cameraShake != null)
+            Destroy(collision.gameObject);
+            TakeDamage(1);
+        }
+        else if (collision.CompareTag("Player"))
+        {
+            var playerHealth = collision.GetComponent<PlayerHealth>();
+            if (playerHealth != null && !playerHealth.IsInvincible())
             {
-                cameraShake.start = true;
+                playerHealth.TakeDamage(1);
+                var shake = Camera.main.GetComponent<Shake>();
+                if (shake != null) shake.start = true;
+                Destroy(gameObject);
             }
+        }
+    }
+
+    private void TakeDamage(int amount)
+    {
+        currentHealth -= amount;
+        if (currentHealth <= 0)
+        {
+            if (isGolden && coinPrefab != null)
+                Instantiate(coinPrefab, transform.position, Quaternion.identity);
 
             Destroy(gameObject);
         }
     }
-}
-
 }

@@ -6,12 +6,9 @@ public class MainMenu : MonoBehaviour
     // Method to load the game scene when 'Start' is clicked.
     public void StartGame()
 {
-    var music = GameObject.FindObjectOfType<MainMenuMusic>();
-    if (music != null)
-        music.FadeOutAndDestroy();
-
     SceneManager.LoadScene("GameScene");
 }
+
 
 
     // Method to open the settings menu when 'Settings' is clicked.

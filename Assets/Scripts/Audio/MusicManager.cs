@@ -1,0 +1,108 @@
+using UnityEngine;
+using UnityEngine.SceneManagement;
+using System.Collections;
+
+[RequireComponent(typeof(AudioSource))]
+public class MusicManager : MonoBehaviour
+{
+    public static MusicManager Instance;
+
+    public AudioClip menuTheme;
+    public AudioClip gameTheme;
+
+    public float fadeDuration = 2f;
+
+    private AudioSource audioSource;
+
+    private void Awake()
+    {
+        if (Instance != null)
+        {
+            Destroy(gameObject);
+            return;
+        }
+
+        Instance = this;
+        DontDestroyOnLoad(gameObject);
+
+        audioSource = GetComponent<AudioSource>();
+        audioSource.loop = true;
+        audioSource.playOnAwake = false;
+
+        if (menuTheme != null)
+        {
+            audioSource.clip = menuTheme;
+            audioSource.volume = 0f;
+            audioSource.Play();
+            StartCoroutine(FadeIn());
+        }
+
+        // Listen for scene changes
+        SceneManager.sceneLoaded += OnSceneLoaded;
+    }
+
+    private void OnDestroy()
+    {
+        SceneManager.sceneLoaded -= OnSceneLoaded;
+    }
+
+    private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
+    {
+        if (scene.name == "GameScene") // Change this to match your actual gameplay scene name
+        {
+            if (gameTheme != null && audioSource.clip != gameTheme)
+            {
+                StartCoroutine(SwitchTrack(gameTheme));
+            }
+        }
+        else if (scene.name == "MainMenu") // Optional: return to menu music
+        {
+            if (menuTheme != null && audioSource.clip != menuTheme)
+            {
+                StartCoroutine(SwitchTrack(menuTheme));
+            }
+        }
+    }
+
+    private IEnumerator SwitchTrack(AudioClip newClip)
+    {
+        float timer = 0f;
+        float startVolume = audioSource.volume;
+
+        while (timer < fadeDuration)
+        {
+            audioSource.volume = Mathf.Lerp(startVolume, 0f, timer / fadeDuration);
+            timer += Time.deltaTime;
+            yield return null;
+        }
+
+        audioSource.Stop();
+        audioSource.clip = newClip;
+        audioSource.Play();
+
+        timer = 0f;
+        while (timer < fadeDuration)
+        {
+            audioSource.volume = Mathf.Lerp(0f, startVolume, timer / fadeDuration);
+            timer += Time.deltaTime;
+            yield return null;
+        }
+
+        audioSource.volume = startVolume;
+    }
+
+    private IEnumerator FadeIn()
+    {
+        float targetVolume = 1f;
+        float timer = 0f;
+
+        while (timer < fadeDuration)
+        {
+            audioSource.volume = Mathf.Lerp(0f, targetVolume, timer / fadeDuration);
+            timer += Time.deltaTime;
+            yield return null;
+        }
+
+        audioSource.volume = targetVolume;
+    }
+}

@@ -4,8 +4,8 @@ using UnityEngine.SceneManagement;
 public class PauseMenu : MonoBehaviour
 {
     [SerializeField] private GameObject pauseMenuUI;
-    // Reference to your gameplay UI group (like health bar, timer, etc.)
     [SerializeField] private GameObject gameplayUI;
+    [SerializeField] private GameObject settingsPanel; // Reference to the settings panel
 
     private bool isPaused = false;
 
@@ -44,8 +44,13 @@ public class PauseMenu : MonoBehaviour
         SceneManager.LoadScene("MainMenu");
     }
 
-    public void OpenSettings()
+    public void CloseSettings()
     {
-        Debug.Log("Settings Button Pressed!");
+        // Close the settings panel and return to the pause menu
+        if (settingsPanel != null)
+        {
+            settingsPanel.SetActive(false);
+            pauseMenuUI.SetActive(true); // Show pause menu again
+        }
     }
 }

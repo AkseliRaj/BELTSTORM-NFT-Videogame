@@ -10,6 +10,12 @@ public class PlayerHealth : MonoBehaviour
     private Timer gameTimer;
     private bool isInvincible = false;
 
+    [Header("Audio")]
+    public AudioClip damageSound;
+    public AudioSource audioSource;
+    public Vector2 pitchRange = new Vector2(0.95f, 1.05f);
+
+
     void Awake()
     {
         currentHealth = maxHealth;
@@ -21,14 +27,22 @@ public class PlayerHealth : MonoBehaviour
 
     public void TakeDamage(int damageAmount)
     {
-        if (isInvincible) return; // Ignore damage during dodge
+        if (isInvincible) return;
 
         currentHealth -= damageAmount;
         OnHealthChanged?.Invoke(currentHealth, maxHealth);
         Debug.Log("Player hit! Health: " + currentHealth);
 
+        // Play damage sound
+        if (damageSound != null && audioSource != null)
+        {
+            audioSource.pitch = UnityEngine.Random.Range(pitchRange.x, pitchRange.y);
+            audioSource.PlayOneShot(damageSound);
+        }
+
         if (currentHealth <= 0) Die();
     }
+
 
     public void SetInvincible(bool value)
     {

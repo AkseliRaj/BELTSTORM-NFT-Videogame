@@ -189,3 +189,9 @@ MonoBehaviour:
   isGolden: 0
   coinPrefab: {fileID: 0}
   screenBoundsBuffer: 1
+  destructionSounds:
+  - {fileID: 8300000, guid: f32ee6181dc3d924a8081a8ac7d4e86e, type: 3}
+  hitSound: {fileID: 8300000, guid: 2e1f066b62a3efc4fae7df523e16f34d, type: 3}
+  volume: 1
+  destructionPitchRange: {x: 0.95, y: 1.05}
+  hitPitchRange: {x: 0.95, y: 1.05}

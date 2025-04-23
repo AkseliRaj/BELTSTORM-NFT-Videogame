@@ -105,6 +105,10 @@ MonoBehaviour:
   rotationSpeed: 200
   maxSpeed: 10
   friction: 0.9
+  engineParticles: {fileID: 0}
+  dodgeForce: 20
+  dodgeDuration: 0.3
+  dodgeCooldown: 1
 --- !u!114 &2609523054115509385
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -121,6 +125,10 @@ MonoBehaviour:
   firePoint: {fileID: 6734400272623134033}
   laserSpeed: 10
   fireRate: 0.2
+  laserSound: {fileID: 8300000, guid: ab7daf6f4acd8644eb09427dad596d69, type: 3}
+  laserVolume: 0.8
+  pitchMin: 0.95
+  pitchMax: 1.05
 --- !u!50 &9161750325737791009
 Rigidbody2D:
   serializedVersion: 4

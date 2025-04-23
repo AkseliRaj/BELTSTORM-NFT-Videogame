@@ -1,4 +1,4 @@
-using UnityEngine;
+﻿using UnityEngine;
 
 public class PlayerMovement : MonoBehaviour
 {
@@ -18,6 +18,12 @@ public class PlayerMovement : MonoBehaviour
     private Rigidbody2D rb;
     private Vector2 screenBounds;
     private PlayerHealth playerHealth; // To set invincibility
+
+    [Header("Audio Settings")]
+    public AudioClip boostSound;
+    public AudioSource audioSource;
+    public Vector2 pitchRange = new Vector2(0.95f, 1.05f);
+
 
     void Start()
     {
@@ -58,6 +64,16 @@ public class PlayerMovement : MonoBehaviour
         }
     }
 
+    void PlayBoostSound()
+    {
+        if (boostSound == null || audioSource == null) return;
+
+        audioSource.pitch = Random.Range(pitchRange.x, pitchRange.y);
+        audioSource.PlayOneShot(boostSound);
+    }
+
+
+
     void FixedUpdate()
     {
         if (!isDodging)
@@ -90,10 +106,12 @@ public class PlayerMovement : MonoBehaviour
 
         if (playerHealth != null) playerHealth.SetInvincible(true);
 
-        Vector2 dodgeDirection = transform.up; // Dodge in the ship's facing direction
+        Vector2 dodgeDirection = transform.up;
 
         rb.velocity = Vector2.zero;
         rb.AddForce(dodgeDirection * dodgeForce, ForceMode2D.Impulse);
+
+        PlayBoostSound();
 
         yield return new WaitForSeconds(dodgeDuration);
 
@@ -103,5 +121,6 @@ public class PlayerMovement : MonoBehaviour
         yield return new WaitForSeconds(dodgeCooldown);
         canDodge = true;
     }
+
 
 }

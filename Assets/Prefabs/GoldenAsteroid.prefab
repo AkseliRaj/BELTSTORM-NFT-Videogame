@@ -151,7 +151,7 @@ BoxCollider2D:
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0.5}
-    oldSize: {x: 0.45, y: 0.48}
+    oldSize: {x: 0.39, y: 0.42}
     newSize: {x: 1, y: 1}
     adaptiveTilingThreshold: 0.5
     drawMode: 0
@@ -189,3 +189,9 @@ MonoBehaviour:
   isGolden: 1
   coinPrefab: {fileID: 4217507988290910147, guid: a5808a96d7ebebb48ab247b26f347439, type: 3}
   screenBoundsBuffer: 1
+  destructionSounds:
+  - {fileID: 8300000, guid: f32ee6181dc3d924a8081a8ac7d4e86e, type: 3}
+  hitSound: {fileID: 0}
+  volume: 1
+  destructionPitchRange: {x: 0.95, y: 1.05}
+  hitPitchRange: {x: 0.95, y: 1.05}

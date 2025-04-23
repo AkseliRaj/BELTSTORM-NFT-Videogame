@@ -9,7 +9,6 @@ public class LaserShooting : MonoBehaviour
 
     [Header("Laser Sound")]
     public AudioClip laserSound;
-    public float laserVolume = 0.8f;
     public float pitchMin = 0.95f;
     public float pitchMax = 1.05f;
 
@@ -34,19 +33,11 @@ public class LaserShooting : MonoBehaviour
             rb.velocity = firePoint.up * laserSpeed;
         }
 
-        // Play sound with random pitch
-        if (laserSound != null)
+        // Play laser sound using SFXManager
+        if (laserSound != null && SFXManager.Instance != null)
         {
-            GameObject tempGO = new GameObject("LaserSound");
-            tempGO.transform.position = firePoint.position;
-
-            AudioSource aSource = tempGO.AddComponent<AudioSource>();
-            aSource.clip = laserSound;
-            aSource.volume = laserVolume;
-            aSource.pitch = Random.Range(pitchMin, pitchMax);
-            aSource.Play();
-
-            Destroy(tempGO, laserSound.length / aSource.pitch);
+            float pitch = Random.Range(pitchMin, pitchMax);
+            SFXManager.Instance.PlaySoundWithPitch(laserSound, firePoint.position, pitch);
         }
     }
 }

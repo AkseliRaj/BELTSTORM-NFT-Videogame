@@ -1,7 +1,7 @@
-using UnityEngine;
+﻿using UnityEngine;
 using System;
-public class PlayerHealth : MonoBehaviour
 
+public class PlayerHealth : MonoBehaviour
 {
     public int maxHealth = 5;
     public int currentHealth;
@@ -12,9 +12,7 @@ public class PlayerHealth : MonoBehaviour
 
     [Header("Audio")]
     public AudioClip damageSound;
-    public AudioSource audioSource;
     public Vector2 pitchRange = new Vector2(0.95f, 1.05f);
-
 
     void Awake()
     {
@@ -33,16 +31,15 @@ public class PlayerHealth : MonoBehaviour
         OnHealthChanged?.Invoke(currentHealth, maxHealth);
         Debug.Log("Player hit! Health: " + currentHealth);
 
-        // Play damage sound
-        if (damageSound != null && audioSource != null)
+        //Play damage sound using SFXManager
+        if (damageSound != null && SFXManager.Instance != null)
         {
-            audioSource.pitch = UnityEngine.Random.Range(pitchRange.x, pitchRange.y);
-            audioSource.PlayOneShot(damageSound);
+            float pitch = UnityEngine.Random.Range(pitchRange.x, pitchRange.y);
+            SFXManager.Instance.PlaySoundWithPitch(damageSound, transform.position, pitch);
         }
 
         if (currentHealth <= 0) Die();
     }
-
 
     public void SetInvincible(bool value)
     {

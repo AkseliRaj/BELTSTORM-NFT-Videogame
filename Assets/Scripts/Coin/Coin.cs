@@ -6,8 +6,8 @@ public class Coin : MonoBehaviour
     public int coinValue = 1;
     public GameObject pickupPopupPrefab;
 
-    public AudioClip[] coinPickupSounds; // assign your two (or more) coin pickup sounds here
-    public float volume = 1f;
+    public AudioClip[] coinPickupSounds; // assign your coin pickup sounds
+    public Vector2 pitchRange = new Vector2(0.95f, 1.05f); // Optional: pitch variety
 
     void OnTriggerEnter2D(Collider2D other)
     {
@@ -23,11 +23,12 @@ public class Coin : MonoBehaviour
                     FindObjectOfType<Canvas>().transform);
             }
 
-            // Play a random coin sound
-            if (coinPickupSounds != null && coinPickupSounds.Length > 0)
+            // Play a random coin sound using SFXManager
+            if (coinPickupSounds != null && coinPickupSounds.Length > 0 && SFXManager.Instance != null)
             {
                 AudioClip selectedClip = coinPickupSounds[Random.Range(0, coinPickupSounds.Length)];
-                AudioSource.PlayClipAtPoint(selectedClip, transform.position, volume);
+                float randomPitch = Random.Range(pitchRange.x, pitchRange.y);
+                SFXManager.Instance.PlaySoundWithPitch(selectedClip, transform.position, randomPitch);
             }
 
             Destroy(gameObject);

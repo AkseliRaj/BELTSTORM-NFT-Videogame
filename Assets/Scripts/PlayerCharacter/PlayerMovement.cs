@@ -17,13 +17,11 @@ public class PlayerMovement : MonoBehaviour
     private bool canDodge = true;
     private Rigidbody2D rb;
     private Vector2 screenBounds;
-    private PlayerHealth playerHealth; // To set invincibility
+    private PlayerHealth playerHealth;
 
     [Header("Audio Settings")]
     public AudioClip boostSound;
-    public AudioSource audioSource;
     public Vector2 pitchRange = new Vector2(0.95f, 1.05f);
-
 
     void Start()
     {
@@ -66,13 +64,12 @@ public class PlayerMovement : MonoBehaviour
 
     void PlayBoostSound()
     {
-        if (boostSound == null || audioSource == null) return;
-
-        audioSource.pitch = Random.Range(pitchRange.x, pitchRange.y);
-        audioSource.PlayOneShot(boostSound);
+        if (boostSound != null && SFXManager.Instance != null)
+        {
+            float pitch = Random.Range(pitchRange.x, pitchRange.y);
+            SFXManager.Instance.PlaySoundWithPitch(boostSound, transform.position, pitch);
+        }
     }
-
-
 
     void FixedUpdate()
     {
@@ -121,6 +118,4 @@ public class PlayerMovement : MonoBehaviour
         yield return new WaitForSeconds(dodgeCooldown);
         canDodge = true;
     }
-
-
 }

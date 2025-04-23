@@ -41,13 +41,13 @@ public class SettingsMenu : MonoBehaviour
     }
 
    public void SetSFXVolume(float value)
-{
-    PlayerPrefs.SetFloat("SFXVolume", value);
-
-    // You can apply this to sound effects manually later if needed
-    // SFXManager.SetGlobalVolume(value);
-}
-
+    {
+        PlayerPrefs.SetFloat("SFXVolume", value);
+        if (SFXManager.Instance != null)
+        {
+            SFXManager.Instance.SetGlobalVolume(value);
+        }
+    }
 
     private void ApplyVolumes()
     {

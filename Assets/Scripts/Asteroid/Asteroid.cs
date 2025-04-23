@@ -14,8 +14,8 @@ public class Asteroid : MonoBehaviour
     public float screenBoundsBuffer = 1f;
 
     [Header("Audio")]
-    public AudioClip[] destructionSounds;    // 2 random sounds
-    public AudioClip hitSound;               // plays on laser hit (non-golden)
+    public AudioClip[] destructionSounds;
+    public AudioClip hitSound;
     public float volume = 1f;
     public Vector2 destructionPitchRange = new Vector2(0.95f, 1.05f);
     public Vector2 hitPitchRange = new Vector2(0.95f, 1.05f);
@@ -46,17 +46,17 @@ public class Asteroid : MonoBehaviour
             TakeDamage(1);
         }
         else if (collision.CompareTag("Player"))
-{
-        var playerHealth = collision.GetComponent<PlayerHealth>();
-        if (playerHealth != null && !playerHealth.IsInvincible())
         {
-            playerHealth.TakeDamage(1);
-            var shake = Camera.main.GetComponent<Shake>();
-            if (shake != null) shake.start = true;
-            Destroy(gameObject); // No sound here!
-        }
-    }
+            var playerHealth = collision.GetComponent<PlayerHealth>();
+            if (playerHealth != null && !playerHealth.IsInvincible())
+            {
+                playerHealth.TakeDamage(1);
+                var shake = Camera.main.GetComponent<Shake>();
+                if (shake != null) shake.start = true;
 
+                Destroy(gameObject); // No sound here
+            }
+        }
     }
 
     private void TakeDamage(int amount)
@@ -68,43 +68,30 @@ public class Asteroid : MonoBehaviour
             if (isGolden && coinPrefab != null)
                 Instantiate(coinPrefab, transform.position, Quaternion.identity);
 
-            PlayRandomSound(destructionSounds, destructionPitchRange);
+            PlayRandomDestructionSound();
             Destroy(gameObject);
         }
         else if (!isGolden && hitSound != null)
         {
-            PlaySingleSound(hitSound, hitPitchRange);
+            PlayHitSound();
         }
     }
 
-    private void PlayRandomSound(AudioClip[] clips, Vector2 pitchRange)
+    private void PlayRandomDestructionSound()
     {
-        if (clips == null || clips.Length == 0) return;
+        if (SFXManager.Instance == null || destructionSounds == null || destructionSounds.Length == 0)
+            return;
 
-        AudioClip clip = clips[Random.Range(0, clips.Length)];
-        GameObject tempGO = new GameObject("AsteroidSound");
-        tempGO.transform.position = transform.position;
-
-        AudioSource aSource = tempGO.AddComponent<AudioSource>();
-        aSource.clip = clip;
-        aSource.volume = volume;
-        aSource.pitch = Random.Range(pitchRange.x, pitchRange.y);
-        aSource.Play();
-
-        Destroy(tempGO, clip.length / aSource.pitch);
+        AudioClip clip = destructionSounds[Random.Range(0, destructionSounds.Length)];
+        float pitch = Random.Range(destructionPitchRange.x, destructionPitchRange.y);
+        SFXManager.Instance.PlaySoundWithPitch(clip, transform.position, pitch);
     }
 
-    private void PlaySingleSound(AudioClip clip, Vector2 pitchRange)
+    private void PlayHitSound()
     {
-        GameObject tempGO = new GameObject("AsteroidHitSound");
-        tempGO.transform.position = transform.position;
+        if (SFXManager.Instance == null || hitSound == null) return;
 
-        AudioSource aSource = tempGO.AddComponent<AudioSource>();
-        aSource.clip = clip;
-        aSource.volume = volume;
-        aSource.pitch = Random.Range(pitchRange.x, pitchRange.y);
-        aSource.Play();
-
-        Destroy(tempGO, clip.length / aSource.pitch);
+        float pitch = Random.Range(hitPitchRange.x, hitPitchRange.y);
+        SFXManager.Instance.PlaySoundWithPitch(hitSound, transform.position, pitch);
     }
 }

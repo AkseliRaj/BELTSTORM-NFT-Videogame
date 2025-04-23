@@ -1,4 +1,4 @@
-    using UnityEngine;
+using UnityEngine;
 
 public class UIAudioManager : MonoBehaviour
 {
@@ -6,8 +6,6 @@ public class UIAudioManager : MonoBehaviour
 
     public AudioClip hoverSound;
     public AudioClip clickSound;
-
-    private AudioSource audioSource;
 
     private void Awake()
     {
@@ -20,20 +18,21 @@ public class UIAudioManager : MonoBehaviour
 
         Instance = this;
         DontDestroyOnLoad(gameObject);
-
-        audioSource = gameObject.AddComponent<AudioSource>();
-        audioSource.playOnAwake = false;
     }
 
     public void PlayHoverSound()
     {
-        if (hoverSound != null)
-            audioSource.PlayOneShot(hoverSound);
+        if (hoverSound != null && SFXManager.Instance != null)
+        {
+            SFXManager.Instance.PlaySound(hoverSound, Camera.main.transform.position);
+        }
     }
 
     public void PlayClickSound()
     {
-        if (clickSound != null)
-            audioSource.PlayOneShot(clickSound);
+        if (clickSound != null && SFXManager.Instance != null)
+        {
+            SFXManager.Instance.PlaySound(clickSound, Camera.main.transform.position);
+        }
     }
 }

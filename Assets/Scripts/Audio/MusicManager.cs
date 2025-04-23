@@ -32,7 +32,7 @@ public class MusicManager : MonoBehaviour
         if (menuTheme != null)
         {
             audioSource.clip = menuTheme;
-            audioSource.volume = 0f;
+            audioSource.volume = PlayerPrefs.GetFloat("MusicVolume", 1f);
             audioSource.Play();
             StartCoroutine(FadeIn());
         }
@@ -105,4 +105,10 @@ public class MusicManager : MonoBehaviour
 
         audioSource.volume = targetVolume;
     }
+
+    public void SetVolume(float volume)
+    {
+        audioSource.volume = volume;
+    }
+
 }

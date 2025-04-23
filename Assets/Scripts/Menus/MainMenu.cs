@@ -5,6 +5,8 @@ public class MainMenu : MonoBehaviour
 {
     public GameObject mainMenuUI;
     public GameObject infoUI;
+    public SettingsMenu settingsMenu;
+
 
     // Method to load the game scene when 'Start' is clicked.
     public void StartGame()
@@ -16,7 +18,18 @@ public class MainMenu : MonoBehaviour
     public void OpenSettings()
     {
         Debug.Log("Settings button clicked");
+
+        if (settingsMenu != null)
+        {
+            settingsMenu.OpenSettings();
+            mainMenuUI.SetActive(false);
+        }
+        else
+        {
+            Debug.LogWarning("SettingsMenu reference is missing!");
+        }
     }
+
 
     // Method to quit the game when 'Quit' is clicked.
     public void QuitGame()

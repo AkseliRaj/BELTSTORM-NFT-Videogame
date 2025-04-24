@@ -1,5 +1,6 @@
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using TMPro;
 
 public class MainMenu : MonoBehaviour
 {
@@ -7,14 +8,18 @@ public class MainMenu : MonoBehaviour
     public GameObject infoUI;
     public SettingsMenu settingsMenu;
 
+    [SerializeField] private TextMeshProUGUI bestTimeText;
 
-    // Method to load the game scene when 'Start' is clicked.
+    void Start()
+    {
+        ShowBestTime();
+    }
+
     public void StartGame()
     {
         SceneManager.LoadScene("GameScene");
     }
 
-    // Method to open the settings menu when 'Settings' is clicked.
     public void OpenSettings()
     {
         Debug.Log("Settings button clicked");
@@ -30,25 +35,29 @@ public class MainMenu : MonoBehaviour
         }
     }
 
-
-    // Method to quit the game when 'Quit' is clicked.
     public void QuitGame()
     {
         Debug.Log("Quit button clicked");
         Application.Quit();
     }
 
-    // Method to show the Info UI and hide the Main Menu UI
     public void ShowInfoUI()
     {
         mainMenuUI.SetActive(false);
         infoUI.SetActive(true);
     }
 
-    // Optional: Method to go back to the Main Menu from Info UI
     public void BackToMainMenu()
     {
         infoUI.SetActive(false);
         mainMenuUI.SetActive(true);
+    }
+
+    private void ShowBestTime()
+    {
+        float bestTime = PlayerPrefs.GetFloat("BestTime", 0f);
+        int minutes = Mathf.FloorToInt(bestTime / 60f);
+        int seconds = Mathf.FloorToInt(bestTime % 60f);
+        bestTimeText.text = $"Best Time {minutes:00}:{seconds:00}";
     }
 }

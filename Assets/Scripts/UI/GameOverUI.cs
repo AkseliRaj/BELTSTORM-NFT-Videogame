@@ -2,7 +2,6 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 using TMPro;
-using System;
 
 public class GameOverUI : MonoBehaviour
 {
@@ -11,6 +10,7 @@ public class GameOverUI : MonoBehaviour
     [SerializeField] private GameObject gameOverPanel;
     [SerializeField] private TextMeshProUGUI coinsText;
     [SerializeField] private TextMeshProUGUI timeText;
+    [SerializeField] private TextMeshProUGUI newBestText;
     [SerializeField] private Button retryButton;
     [SerializeField] private Button mainMenuButton;
 
@@ -22,8 +22,10 @@ public class GameOverUI : MonoBehaviour
         if (gameTimer == null)
             Debug.LogError("No Timer found in scene!");
 
-        // Ensure Game Over is hidden on start
         gameOverPanel.SetActive(false);
+
+        if (newBestText != null)
+            newBestText.gameObject.SetActive(false); // Ensure it's hidden initially
     }
 
     void OnEnable()
@@ -38,32 +40,42 @@ public class GameOverUI : MonoBehaviour
 
     private void ShowGameOver()
     {
-        // stop timer
         if (gameTimer != null)
             gameTimer.StopTimer();
 
-        // HIDE gameplay HUD
         if (playerUI != null)
             playerUI.SetActive(false);
 
-        // SHOW game over UI
         gameOverPanel.SetActive(true);
 
-        // populate coins
-        int coins = CurrencyManager.Instance != null
-            ? CurrencyManager.Instance.CoinTotal
-            : 0;
+        // Update coins
+        int coins = CurrencyManager.Instance != null ? CurrencyManager.Instance.CoinTotal : 0;
         coinsText.text = $"{coins}";
 
-        // populate time
-        float elapsed = (gameTimer != null) 
-            ? gameTimer.ElapsedTime 
-            : 0f;
+        // Update time
+        float elapsed = gameTimer != null ? gameTimer.ElapsedTime : 0f;
+
+        // Check for new best
+        float bestTime = PlayerPrefs.GetFloat("BestTime", 0f);
+        bool isNewBest = elapsed > bestTime;
+
+        if (isNewBest)
+        {
+            PlayerPrefs.SetFloat("BestTime", elapsed);
+            PlayerPrefs.Save();
+            Debug.Log("New best time saved: " + elapsed);
+        }
+
+        // Format and display time
         int m = Mathf.FloorToInt(elapsed / 60f);
         int s = Mathf.FloorToInt(elapsed % 60f);
         timeText.text = $"{m:00}:{s:00}";
 
-        // hook buttons
+        // Show NEW BEST if applicable
+        if (newBestText != null)
+            newBestText.gameObject.SetActive(isNewBest);
+
+        // Setup buttons
         retryButton.onClick.RemoveAllListeners();
         retryButton.onClick.AddListener(RestartLevel);
 
@@ -73,13 +85,12 @@ public class GameOverUI : MonoBehaviour
 
     private void RestartLevel()
     {
-        // When the level reloads, Awake() will re-enable your HUD
         SceneManager.LoadScene(SceneManager.GetActiveScene().name);
     }
 
     private void GoToMainMenu()
     {
-        Time.timeScale = 1f; // make sure timeScale is reset
+        Time.timeScale = 1f;
         SceneManager.LoadScene("MainMenu");
     }
 }

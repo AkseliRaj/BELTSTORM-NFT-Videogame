@@ -93,7 +93,9 @@ public class MusicManager : MonoBehaviour
 
     private IEnumerator FadeIn()
     {
-        float targetVolume = 1f;
+        float targetVolume = PlayerPrefs.GetFloat("MusicVolume", 1f);
+        Debug.Log("Loaded Music Volume (FadeIn target): " + targetVolume);
+
         float timer = 0f;
 
         while (timer < fadeDuration)

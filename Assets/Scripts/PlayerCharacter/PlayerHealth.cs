@@ -6,6 +6,8 @@ public class PlayerHealth : MonoBehaviour
     public int maxHealth = 5;
     public int currentHealth;
     public event Action<int, int> OnHealthChanged;
+    public static event Action OnPlayerDied;
+
 
     private Timer gameTimer;
     private bool isInvincible = false;
@@ -53,10 +55,15 @@ public class PlayerHealth : MonoBehaviour
     }
 
     void Die()
-    {
-        Debug.Log("Player has died.");
-        OnHealthChanged?.Invoke(0, maxHealth);
-        if (gameTimer != null) gameTimer.StopTimer();
-        Destroy(gameObject);
-    }
+{
+    Debug.Log("Player has died.");
+    OnHealthChanged?.Invoke(0, maxHealth);
+    if (gameTimer != null) gameTimer.StopTimer();
+
+    // notify listeners:
+    OnPlayerDied?.Invoke();
+
+    Destroy(gameObject);
+}
+
 }

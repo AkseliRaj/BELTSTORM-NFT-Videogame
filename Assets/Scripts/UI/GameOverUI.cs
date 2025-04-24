@@ -92,4 +92,10 @@ public class GameOverUI : MonoBehaviour
         Time.timeScale = 1f;
         SceneManager.LoadScene("MainMenu");
     }
+
+    void OnSceneLoaded(Scene s, LoadSceneMode m) {
+    gameOverPanel = GameObject.Find("GameOverPanel");
+    gameOverPanel.SetActive(false);
+}
+
 }

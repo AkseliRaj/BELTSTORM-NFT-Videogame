@@ -17,8 +17,10 @@ public class MainMenu : MonoBehaviour
 
     public void StartGame()
     {
+        CurrencyManager.Instance.ResetSessionCoins();
         SceneManager.LoadScene("GameScene");
     }
+
 
     public void OpenSettings()
     {
@@ -52,6 +54,12 @@ public class MainMenu : MonoBehaviour
         infoUI.SetActive(false);
         mainMenuUI.SetActive(true);
     }
+
+    public void OpenShop()
+    {
+        SceneManager.LoadScene("ShopScene");
+    }
+
 
     private void ShowBestTime()
     {

@@ -7927,51 +7927,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1713903620}
   m_CullTransparentMesh: 1
---- !u!1 &1812520168
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1812520170}
-  - component: {fileID: 1812520169}
-  m_Layer: 0
-  m_Name: CurrencyManager
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!114 &1812520169
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1812520168}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e6be9a20da6a794419e6680c56481244, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  coinUIText: {fileID: 1572897665}
---- !u!4 &1812520170
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1812520168}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -0.023338843, y: -1.5136747, z: -3.0047812}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1815896372
 GameObject:
   m_ObjectHideFlags: 0
@@ -8190,6 +8145,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1842223226}
+  - component: {fileID: 1842223227}
   m_Layer: 5
   m_Name: CoinAmount
   m_TagString: Untagged
@@ -8218,6 +8174,19 @@ RectTransform:
   m_AnchoredPosition: {x: -767.1161, y: 245.375}
   m_SizeDelta: {x: 391.76782, y: 93.25}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &1842223227
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1842223225}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5e8673a6e1f16bf41b7a80c3590e1a07, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  coinText: {fileID: 1572897665}
 --- !u!1 &1844839153
 GameObject:
   m_ObjectHideFlags: 0
@@ -8925,17 +8894,29 @@ PrefabInstance:
       value: PlayerCharacter
       objectReference: {fileID: 0}
     - target: {fileID: 7239898857147596241, guid: 9684955081ec38f469a3fadfb94ab696, type: 3}
+      propertyPath: maxSpeed
+      value: 100
+      objectReference: {fileID: 0}
+    - target: {fileID: 7239898857147596241, guid: 9684955081ec38f469a3fadfb94ab696, type: 3}
       propertyPath: boostSound
       value: 
       objectReference: {fileID: 8300000, guid: 072438498a1315545aa293b03b6501e6, type: 3}
     - target: {fileID: 7239898857147596241, guid: 9684955081ec38f469a3fadfb94ab696, type: 3}
       propertyPath: dodgeForce
-      value: 13
+      value: 10
       objectReference: {fileID: 0}
     - target: {fileID: 7239898857147596241, guid: 9684955081ec38f469a3fadfb94ab696, type: 3}
       propertyPath: audioSource
       value: 
       objectReference: {fileID: 9116770154941052385}
+    - target: {fileID: 7239898857147596241, guid: 9684955081ec38f469a3fadfb94ab696, type: 3}
+      propertyPath: thrustForce
+      value: 450
+      objectReference: {fileID: 0}
+    - target: {fileID: 7239898857147596241, guid: 9684955081ec38f469a3fadfb94ab696, type: 3}
+      propertyPath: rotationSpeed
+      value: 190
+      objectReference: {fileID: 0}
     - target: {fileID: 7239898857147596241, guid: 9684955081ec38f469a3fadfb94ab696, type: 3}
       propertyPath: engineParticles
       value: 
@@ -8995,6 +8976,14 @@ PrefabInstance:
     - target: {fileID: 7673574705188035250, guid: 9684955081ec38f469a3fadfb94ab696, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 9161750325737791009, guid: 9684955081ec38f469a3fadfb94ab696, type: 3}
+      propertyPath: m_Mass
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 9161750325737791009, guid: 9684955081ec38f469a3fadfb94ab696, type: 3}
+      propertyPath: m_LinearDrag
+      value: 2.5
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -9138,4 +9127,3 @@ SceneRoots:
   - {fileID: 1496411988}
   - {fileID: 1319766976}
   - {fileID: 1009540861}
-  - {fileID: 1812520170}

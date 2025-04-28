@@ -9,6 +9,8 @@ public class MusicManager : MonoBehaviour
 
     public AudioClip menuTheme;
     public AudioClip gameTheme;
+    public AudioClip shopTheme;
+
 
     public float fadeDuration = 2f;
 
@@ -47,22 +49,30 @@ public class MusicManager : MonoBehaviour
     }
 
     private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
-    {
-        if (scene.name == "GameScene") // Change this to match your actual gameplay scene name
+{
+    if (scene.name == "GameScene")
         {
             if (gameTheme != null && audioSource.clip != gameTheme)
             {
                 StartCoroutine(SwitchTrack(gameTheme));
             }
         }
-        else if (scene.name == "MainMenu") // Optional: return to menu music
+        else if (scene.name == "ShopScene")
+        {
+            if (shopTheme != null && audioSource.clip != shopTheme)
+            {
+                StartCoroutine(SwitchTrack(shopTheme));
+            }
+        }
+        else if (scene.name == "MainMenu")
         {
             if (menuTheme != null && audioSource.clip != menuTheme)
             {
                 StartCoroutine(SwitchTrack(menuTheme));
             }
         }
-    }
+}
+
 
     private IEnumerator SwitchTrack(AudioClip newClip)
     {

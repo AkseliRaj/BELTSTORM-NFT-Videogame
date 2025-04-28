@@ -24,6 +24,7 @@ public class ShopManager : MonoBehaviour
     {
         if (Instance != null && Instance != this) { Destroy(gameObject); return; }
         Instance = this;
+        DontDestroyOnLoad(gameObject);
     }
 
     public bool IsUnlocked(string itemId)

@@ -14,6 +14,7 @@ GameObject:
   - component: {fileID: 2609523054115509385}
   - component: {fileID: 9161750325737791009}
   - component: {fileID: 4996033828186584436}
+  - component: {fileID: 1066094183260693225}
   m_Layer: 0
   m_Name: PlayerCharacter
   m_TagString: Player
@@ -104,11 +105,12 @@ MonoBehaviour:
   thrustForce: 5
   rotationSpeed: 200
   maxSpeed: 10
-  friction: 0.9
   engineParticles: {fileID: 0}
   dodgeForce: 20
   dodgeDuration: 0.3
   dodgeCooldown: 1
+  boostSound: {fileID: 0}
+  pitchRange: {x: 0.95, y: 1.05}
 --- !u!114 &2609523054115509385
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -126,7 +128,6 @@ MonoBehaviour:
   laserSpeed: 10
   fireRate: 0.2
   laserSound: {fileID: 8300000, guid: ab7daf6f4acd8644eb09427dad596d69, type: 3}
-  laserVolume: 0.8
   pitchMin: 0.95
   pitchMax: 1.05
 --- !u!50 &9161750325737791009
@@ -201,6 +202,18 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 0.47284877, y: 0.5788057}
   m_EdgeRadius: 0
+--- !u!114 &1066094183260693225
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2724202107631017171}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4c4080296c428fc4a81548e4ee406faa, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &4146915659585734228
 GameObject:
   m_ObjectHideFlags: 0

@@ -1,0 +1,56 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &918482339120738838
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2221035427669805400}
+  - component: {fileID: 5173770082345219287}
+  m_Layer: 0
+  m_Name: ShopManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &2221035427669805400
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 918482339120738838}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 1424.3108, y: 240.95868, z: -9.656389}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &5173770082345219287
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 918482339120738838}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8990317fdae3d3646a7ec5a1c0dd1614, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  items:
+  - id: Spaceship_1
+    price: 0
+    previewImage: {fileID: 21300000, guid: de71b39a9af11034aaa933c6e14d0976, type: 3}
+  - id: Spaceship_2
+    price: 5
+    previewImage: {fileID: 21300000, guid: ceb420782c6e7ae498b16d9539d2152e, type: 3}
+  - id: Spaceship_3
+    price: 10
+    previewImage: {fileID: 21300000, guid: 77d1d885a65c76f4d8af271187323a92, type: 3}

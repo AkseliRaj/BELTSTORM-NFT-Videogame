@@ -1295,6 +1295,7 @@ GameObject:
   - component: {fileID: 1504813169}
   - component: {fileID: 1504813171}
   - component: {fileID: 1504813170}
+  - component: {fileID: 1504813172}
   m_Layer: 5
   m_Name: ShipPreview
   m_TagString: Untagged
@@ -1359,6 +1360,20 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1504813168}
   m_CullTransparentMesh: 1
+--- !u!114 &1504813172
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1504813168}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 20075fb20d74d3b40aa4eb1294f91071, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  rockAngle: 4
+  rockSpeed: 3
 --- !u!1 &1732489238
 GameObject:
   m_ObjectHideFlags: 0

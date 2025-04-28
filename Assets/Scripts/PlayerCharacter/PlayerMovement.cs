@@ -1,11 +1,12 @@
 ﻿using UnityEngine;
+using System.Collections;
 
 public class PlayerMovement : MonoBehaviour
 {
-    public float thrustForce = 5f;
+    [Header("Movement Settings")]
+    public float thrustForce = 300f;    // Force applied per second
     public float rotationSpeed = 200f;
     public float maxSpeed = 10f;
-    public float friction = 0.98f;
     public ParticleSystem engineParticles;
 
     [Header("Dodge Settings")]
@@ -13,15 +14,16 @@ public class PlayerMovement : MonoBehaviour
     public float dodgeDuration = 0.3f;
     public float dodgeCooldown = 1f;
 
-    private bool isDodging = false;
-    private bool canDodge = true;
-    private Rigidbody2D rb;
-    private Vector2 screenBounds;
-    private PlayerHealth playerHealth;
-
     [Header("Audio Settings")]
     public AudioClip boostSound;
     public Vector2 pitchRange = new Vector2(0.95f, 1.05f);
+
+    private Rigidbody2D rb;
+    private PlayerHealth playerHealth;
+    private Vector2 screenBounds;
+    private bool isDodging = false;
+    private bool canDodge = true;
+    private float thrustInput = 0f;
 
     void Start()
     {
@@ -31,35 +33,53 @@ public class PlayerMovement : MonoBehaviour
         if (rb == null) Debug.LogError("Rigidbody2D missing!");
         if (playerHealth == null) Debug.LogError("PlayerHealth missing!");
 
+        // Ensure you set Rigidbody2D.Linear Drag (e.g., 1f) in the Inspector for friction
+
         Camera cam = Camera.main;
-        Vector3 screenBottomLeft = cam.ViewportToWorldPoint(new Vector3(0, 0, cam.nearClipPlane));
-        Vector3 screenTopRight = cam.ViewportToWorldPoint(new Vector3(1, 1, cam.nearClipPlane));
-        screenBounds = new Vector2(screenTopRight.x, screenTopRight.y);
+        Vector3 bottomLeft = cam.ViewportToWorldPoint(new Vector3(0, 0, cam.nearClipPlane));
+        Vector3 topRight = cam.ViewportToWorldPoint(new Vector3(1, 1, cam.nearClipPlane));
+        screenBounds = new Vector2(topRight.x, topRight.y);
     }
 
     void Update()
     {
+        // Read thrust input in Update for responsiveness
+        thrustInput = (!isDodging && Input.GetKey(KeyCode.W)) ? 1f : 0f;
+
+        // Handle engine particle effects
+        if (engineParticles != null)
+        {
+            if (thrustInput > 0f && !engineParticles.isPlaying)
+                engineParticles.Play();
+            else if (thrustInput == 0f && engineParticles.isPlaying)
+                engineParticles.Stop();
+        }
+
+        // Rotation
         if (!isDodging)
         {
-            float rotationInput = Input.GetAxisRaw("Horizontal");
-            transform.Rotate(0, 0, -rotationInput * rotationSpeed * Time.deltaTime);
-
-            if (Input.GetKey(KeyCode.W))
-            {
-                ApplyThrust(thrustForce);
-                if (engineParticles != null && !engineParticles.isPlaying)
-                    engineParticles.Play();
-            }
-            else if (engineParticles != null && engineParticles.isPlaying)
-            {
-                engineParticles.Stop();
-            }
+            float rot = Input.GetAxisRaw("Horizontal");
+            transform.Rotate(0, 0, -rot * rotationSpeed * Time.deltaTime);
         }
 
+        // Dodge
         if (Input.GetMouseButtonDown(1) && canDodge)
-        {
             StartCoroutine(PerformDodge());
+    }
+
+    void FixedUpdate()
+    {
+        if (!isDodging)
+        {
+            // Apply framerate-independent thrust
+            rb.AddForce(transform.up * thrustForce * thrustInput * Time.fixedDeltaTime,
+                        ForceMode2D.Force);
+
+            // Clamp speed
+            rb.velocity = Vector2.ClampMagnitude(rb.velocity, maxSpeed);
         }
+
+        ClampPositionToScreen();
     }
 
     void PlayBoostSound()
@@ -71,49 +91,33 @@ public class PlayerMovement : MonoBehaviour
         }
     }
 
-    void FixedUpdate()
-    {
-        if (!isDodging)
-        {
-            rb.velocity *= friction;
-            rb.velocity = Vector2.ClampMagnitude(rb.velocity, maxSpeed);
-        }
-
-        ClampPositionToScreen();
-    }
-
-    void ApplyThrust(float force)
-    {
-        Vector2 thrustDirection = transform.up;
-        rb.AddForce(thrustDirection * force);
-    }
-
     void ClampPositionToScreen()
     {
-        Vector3 position = transform.position;
-        position.x = Mathf.Clamp(position.x, -screenBounds.x, screenBounds.x);
-        position.y = Mathf.Clamp(position.y, -screenBounds.y, screenBounds.y);
-        transform.position = position;
+        Vector3 pos = transform.position;
+        pos.x = Mathf.Clamp(pos.x, -screenBounds.x, screenBounds.x);
+        pos.y = Mathf.Clamp(pos.y, -screenBounds.y, screenBounds.y);
+        transform.position = pos;
     }
 
-    System.Collections.IEnumerator PerformDodge()
+    IEnumerator PerformDodge()
     {
         isDodging = true;
         canDodge = false;
 
-        if (playerHealth != null) playerHealth.SetInvincible(true);
+        if (playerHealth != null)
+            playerHealth.SetInvincible(true);
 
-        Vector2 dodgeDirection = transform.up;
+        Vector2 dodgeDir = transform.up;
 
         rb.velocity = Vector2.zero;
-        rb.AddForce(dodgeDirection * dodgeForce, ForceMode2D.Impulse);
-
+        rb.AddForce(dodgeDir * dodgeForce, ForceMode2D.Impulse);
         PlayBoostSound();
 
         yield return new WaitForSeconds(dodgeDuration);
 
         isDodging = false;
-        if (playerHealth != null) playerHealth.SetInvincible(false);
+        if (playerHealth != null)
+            playerHealth.SetInvincible(false);
 
         yield return new WaitForSeconds(dodgeCooldown);
         canDodge = true;

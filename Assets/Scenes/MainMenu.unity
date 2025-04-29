@@ -4468,14 +4468,46 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 699557151}
     m_Modifications:
+    - target: {fileID: 481605297015565043, guid: 98ab33cef72b105449ca239bd3bfa797, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 21300000, guid: aec9e516a059a3944b30c33fc9c6883c, type: 3}
+    - target: {fileID: 486026571150222070, guid: 98ab33cef72b105449ca239bd3bfa797, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1621652781280379482, guid: 98ab33cef72b105449ca239bd3bfa797, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2073208977180781420, guid: 98ab33cef72b105449ca239bd3bfa797, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 2221499378516832369, guid: 98ab33cef72b105449ca239bd3bfa797, type: 3}
       propertyPath: m_Delegates.Array.data[0].callback.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
       objectReference: {fileID: 1447001792}
+    - target: {fileID: 5188951116125498451, guid: 98ab33cef72b105449ca239bd3bfa797, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 21300000, guid: f81ae1890c39d234f8296bd879891463, type: 3}
+    - target: {fileID: 5912620550161582117, guid: 98ab33cef72b105449ca239bd3bfa797, type: 3}
+      propertyPath: m_SpriteState.m_PressedSprite
+      value: 
+      objectReference: {fileID: 21300000, guid: fcace44af3cbb144faa9b5c8aefcdcd1, type: 3}
+    - target: {fileID: 5912620550161582117, guid: 98ab33cef72b105449ca239bd3bfa797, type: 3}
+      propertyPath: m_SpriteState.m_HighlightedSprite
+      value: 
+      objectReference: {fileID: 21300000, guid: c945f2694c3debc4a8e57f7ab6fe22f2, type: 3}
     - target: {fileID: 5912620550161582117, guid: 98ab33cef72b105449ca239bd3bfa797, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
       objectReference: {fileID: 1441861056}
+    - target: {fileID: 5954615932033705166, guid: 98ab33cef72b105449ca239bd3bfa797, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 6003570729828946244, guid: 98ab33cef72b105449ca239bd3bfa797, type: 3}
       propertyPath: m_Pivot.x
       value: 0.5
@@ -4559,6 +4591,10 @@ PrefabInstance:
     - target: {fileID: 8215738857581034399, guid: 98ab33cef72b105449ca239bd3bfa797, type: 3}
       propertyPath: m_Name
       value: SettingsUI
+      objectReference: {fileID: 0}
+    - target: {fileID: 8215738857581034399, guid: 98ab33cef72b105449ca239bd3bfa797, type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

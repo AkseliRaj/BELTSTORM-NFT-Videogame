@@ -7393,6 +7393,7 @@ GameObject:
   - component: {fileID: 1496411988}
   - component: {fileID: 1496411987}
   - component: {fileID: 1496411986}
+  - component: {fileID: 1496411989}
   m_Layer: 0
   m_Name: Background
   m_TagString: Untagged
@@ -7482,6 +7483,30 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1496411989
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1496411985}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 72344f26724aa634b95980afc3956e79, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  starTypes:
+  - sprite: {fileID: 21300000, guid: f19aee08fa1dd6a409148ea5a72cf761, type: 3}
+    fadeCycleTime: 3
+    maxScaleMultiplier: 0.7
+    scaleCycleTime: 0.7
+    spawnWeight: 100
+  spawnArea: {fileID: 1319766976}
+  starPrefab: {fileID: 285345251477774752, guid: 998163fce894a094da22d98d3bf992bd, type: 3}
+  minSpawnInterval: 0.1
+  maxSpawnInterval: 0.1
+  minRotationSpeed: -20
+  maxRotationSpeed: 20
 --- !u!1 &1572897664
 GameObject:
   m_ObjectHideFlags: 0

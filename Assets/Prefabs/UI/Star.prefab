@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 1994800340579485954}
   - component: {fileID: 1722715163725692696}
   m_Layer: 5
-  m_Name: Star1x1
+  m_Name: Star
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -88,6 +88,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: abf5130899c84784fa5df0273d8a8912, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  possibleSprites:
+  - {fileID: 21300000, guid: f19aee08fa1dd6a409148ea5a72cf761, type: 3}
+  - {fileID: 21300000, guid: 1346ea2f6114196479dd90fa3dcdaa5b, type: 3}
+  - {fileID: 21300000, guid: f042b09aba181d248b27cc1de33e0aea, type: 3}
+  - {fileID: 21300000, guid: 31fde5d465cb099419a88db62c14d5ba, type: 3}
+  fadeTimeRange: {x: 1, y: 3}
+  scaleTimeRange: {x: 2, y: 4}
+  scaleMultiplierRange: {x: 1.2, y: 2}
   fadeCycleTime: 5
-  maxScaleMultiplier: 1.5
   scaleCycleTime: 3
+  maxScaleMultiplier: 1.5

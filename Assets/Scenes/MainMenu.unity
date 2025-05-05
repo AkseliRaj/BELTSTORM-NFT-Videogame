@@ -2032,7 +2032,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: 16c56ce3877017b49a66859269058b06, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 1efc14524702f8c4694fc4697517592f, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -2062,10 +2062,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 72344f26724aa634b95980afc3956e79, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  starTypes:
+  - sprite: {fileID: 21300000, guid: f19aee08fa1dd6a409148ea5a72cf761, type: 3}
+    fadeCycleTime: 3
+    maxScaleMultiplier: 1
+    scaleCycleTime: 1
+    spawnWeight: 100
   spawnArea: {fileID: 995877764}
   starPrefab: {fileID: 285345251477774752, guid: 998163fce894a094da22d98d3bf992bd, type: 3}
-  minSpawnInterval: 0.2
-  maxSpawnInterval: 1
+  minSpawnInterval: 0.1
+  maxSpawnInterval: 0.1
+  minRotationSpeed: -20
+  maxRotationSpeed: 20
 --- !u!1 &1007936786
 GameObject:
   m_ObjectHideFlags: 0

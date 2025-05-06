@@ -195,3 +195,5 @@ MonoBehaviour:
   volume: 1
   destructionPitchRange: {x: 0.95, y: 1.05}
   hitPitchRange: {x: 0.95, y: 1.05}
+  smokePrefab: {fileID: 4185219356361014803, guid: 1d83cfea707511543a0881de65abb5a2, type: 3}
+  laserImpactPrefab: {fileID: 4182212875079337277, guid: a111253186e5ea0438bbd69bcd5681b5, type: 3}

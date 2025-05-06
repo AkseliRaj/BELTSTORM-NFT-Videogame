@@ -20,6 +20,12 @@ public class Asteroid : MonoBehaviour
     public Vector2 destructionPitchRange = new Vector2(0.95f, 1.05f);
     public Vector2 hitPitchRange = new Vector2(0.95f, 1.05f);
 
+    [Header("Smoke Effect")]
+    public GameObject smokePrefab; // Shown on asteroid destruction
+
+    [Header("Hit Effect")]
+    public GameObject laserImpactPrefab; // Shown on asteroid hit (not destroyed)
+
     void Start()
     {
         currentHealth = maxHealth;
@@ -42,6 +48,9 @@ public class Asteroid : MonoBehaviour
     {
         if (collision.CompareTag("Laser"))
         {
+            Vector3 impactPoint = collision.transform.position; // Use laser position as impact point
+            SpawnLaserImpact(impactPoint); // Spawn the laser hit effect at impact point
+
             Destroy(collision.gameObject);
             TakeDamage(1);
         }
@@ -54,7 +63,8 @@ public class Asteroid : MonoBehaviour
                 var shake = Camera.main.GetComponent<Shake>();
                 if (shake != null) shake.start = true;
 
-                Destroy(gameObject); // No sound here
+                SpawnSmoke(); // Optional: show smoke when colliding with player
+                Destroy(gameObject);
             }
         }
     }
@@ -69,11 +79,13 @@ public class Asteroid : MonoBehaviour
                 Instantiate(coinPrefab, transform.position, Quaternion.identity);
 
             PlayRandomDestructionSound();
+            SpawnSmoke(); // Smoke when asteroid is destroyed
             Destroy(gameObject);
         }
-        else if (!isGolden && hitSound != null)
+        else
         {
-            PlayHitSound();
+            if (!isGolden && hitSound != null)
+                PlayHitSound();
         }
     }
 
@@ -93,5 +105,26 @@ public class Asteroid : MonoBehaviour
 
         float pitch = Random.Range(hitPitchRange.x, hitPitchRange.y);
         SFXManager.Instance.PlaySoundWithPitch(hitSound, transform.position, pitch);
+    }
+
+    private void SpawnSmoke()
+    {
+        if (smokePrefab != null)
+        {
+            Instantiate(smokePrefab, transform.position, Quaternion.identity);
+        }
+    }
+
+    private void SpawnLaserImpact(Vector3 position)
+    {
+        if (laserImpactPrefab != null)
+        {
+            // Slight z-offset to render in front of asteroid (adjust as needed)
+            Vector3 spawnPos = new Vector3(position.x, position.y, transform.position.z - 0.1f);
+            GameObject impact = Instantiate(laserImpactPrefab, spawnPos, Quaternion.identity);
+
+            // Optional: attach to asteroid to follow its movement (disable if you want effect to stay at hit point)
+            impact.transform.SetParent(transform);
+        }
     }
 }

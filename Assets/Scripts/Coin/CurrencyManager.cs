@@ -34,7 +34,6 @@ public class CurrencyManager : MonoBehaviour
         OnSessionCoinsChanged?.Invoke(sessionCoins);
     }
 
-    /// <summary>Adds coins both to your saved total and to the current session.</summary>
     public void AddCoins(int amount)
     {
         // 1) Persistent total
@@ -48,7 +47,6 @@ public class CurrencyManager : MonoBehaviour
         OnSessionCoinsChanged?.Invoke(sessionCoins);
     }
 
-    /// <summary>Spend from your persistent total (sessionCoins unaffected).</summary>
     public bool SpendCoins(int amount)
     {
         if (totalCoins < amount) return false;
@@ -57,5 +55,19 @@ public class CurrencyManager : MonoBehaviour
         PlayerPrefs.Save();
         OnCoinsChanged?.Invoke(totalCoins);
         return true;
+    }
+
+    public void ResetAllCoins()
+    {
+        // 1) Clear PlayerPrefs
+        PlayerPrefs.DeleteKey(PLAYERPREFS_COINS);
+        PlayerPrefs.Save();
+
+        // 2) Reset in‑memory
+        totalCoins = 0;
+        OnCoinsChanged?.Invoke(totalCoins);
+        
+        // 3) Also reset session, if you like
+        ResetSessionCoins();
     }
 }

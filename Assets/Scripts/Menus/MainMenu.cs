@@ -1,6 +1,7 @@
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.SceneManagement;
 using TMPro;
+using System.Collections.Generic;
 
 public class MainMenu : MonoBehaviour
 {
@@ -20,7 +21,6 @@ public class MainMenu : MonoBehaviour
         CurrencyManager.Instance.ResetSessionCoins();
         SceneManager.LoadScene("GameScene");
     }
-
 
     public void OpenSettings()
     {
@@ -60,6 +60,33 @@ public class MainMenu : MonoBehaviour
         SceneManager.LoadScene("ShopScene");
     }
 
+    /// Resets all player progress: coins, best time, and shop unlocks.
+    public void ResetProgress()
+    {
+        // 1) Wipe saved coins
+        PlayerPrefs.DeleteKey("TotalCoins");
+
+        // 2) Wipe saved best time
+        PlayerPrefs.DeleteKey("BestTime");
+
+        // 3) Wipe all shop unlock flags
+        if (ShopManager.Instance != null)
+        {
+            foreach (var item in ShopManager.Instance.items)
+                PlayerPrefs.DeleteKey("Unlocked_" + item.id);
+        }
+
+        // 4) Persist deletions
+        PlayerPrefs.Save();
+
+        // 5) Reset in‑memory session coins
+        CurrencyManager.Instance.ResetSessionCoins();
+
+        // 6) Update the best‑time display
+        ShowBestTime();
+
+        Debug.Log("Player progress has been reset.");
+    }
 
     private void ShowBestTime()
     {

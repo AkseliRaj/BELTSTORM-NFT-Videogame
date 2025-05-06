@@ -45,3 +45,9 @@ TagManager:
   - name: Default
     uniqueID: 0
     locked: 0
+  - name: SpaceshipLayer1
+    uniqueID: 4148099045
+    locked: 0
+  - name: SpaceshipLayer2
+    uniqueID: 81031631
+    locked: 0

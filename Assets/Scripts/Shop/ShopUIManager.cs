@@ -1,7 +1,10 @@
+﻿// ShopUIManager.cs
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 using System.Collections.Generic;
+// add this so you can call SceneFader.Instance
+using UnityEngine.SceneManagement;
 
 public class ShopUIManager : MonoBehaviour
 {
@@ -11,6 +14,7 @@ public class ShopUIManager : MonoBehaviour
     [SerializeField] private TextMeshProUGUI priceText;
     [SerializeField] private Button buyButton;
     [SerializeField] private TextMeshProUGUI buyButtonText;
+    [SerializeField] private Button backButton; // assign this in inspector
 
     private List<ShopItem> items;
     private int currentIndex = 0;
@@ -21,6 +25,9 @@ public class ShopUIManager : MonoBehaviour
         leftArrow.onClick.AddListener(PrevSkin);
         rightArrow.onClick.AddListener(NextSkin);
         buyButton.onClick.AddListener(OnBuy);
+
+        // hook up back button to fade
+        backButton.onClick.AddListener(BackToMainMenu);
 
         RefreshUI();
     }
@@ -75,7 +82,8 @@ public class ShopUIManager : MonoBehaviour
 
     public void BackToMainMenu()
     {
-        UnityEngine.SceneManagement.SceneManager.LoadScene("MainMenu");
+        // instead of immediate load, fade out → load → fade in
+        SceneFader.Instance.FadeToScene("MainMenu");
     }
 
     private void Equip(string id)

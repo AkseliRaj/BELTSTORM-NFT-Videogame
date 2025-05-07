@@ -1,3 +1,4 @@
+// GameOverUI.cs
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
@@ -38,43 +39,31 @@ public class GameOverUI : MonoBehaviour
         PlayerHealth.OnPlayerDied -= ShowGameOver;
     }
 
-    // This ensures no lingering subscriptions cause errors
-    void OnDestroy()
-    {
-        PlayerHealth.OnPlayerDied -= ShowGameOver;
-    }
-
     private void ShowGameOver()
     {
-        if (gameTimer != null)
-            gameTimer.StopTimer();
-
-        if (playerUI != null)
-            playerUI.SetActive(false);
-
+        gameTimer?.StopTimer();
+        playerUI?.SetActive(false);
         gameOverPanel.SetActive(true);
 
         int coins = CurrencyManager.Instance != null ? CurrencyManager.Instance.CoinTotal : 0;
-        coinsText.text = $"{coins}";
+        coinsText.text = coins.ToString();
 
         float elapsed = gameTimer != null ? gameTimer.ElapsedTime : 0f;
         int m = Mathf.FloorToInt(elapsed / 60f);
         int s = Mathf.FloorToInt(elapsed % 60f);
         timeText.text = $"{m:00}:{s:00}";
 
-        // Handle new best logic
         float bestTime = PlayerPrefs.GetFloat("BestTime", 0f);
         bool isNewBest = elapsed > bestTime;
-
         if (isNewBest)
         {
             PlayerPrefs.SetFloat("BestTime", elapsed);
             PlayerPrefs.Save();
         }
-
         if (newBestText != null)
             newBestText.gameObject.SetActive(isNewBest);
 
+        // wire up buttons
         retryButton.onClick.RemoveAllListeners();
         retryButton.onClick.AddListener(RestartLevel);
 
@@ -84,18 +73,15 @@ public class GameOverUI : MonoBehaviour
 
     private void RestartLevel()
     {
-        SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+        // un-pause just in case and then fade reload
+        Time.timeScale = 1f;
+        string current = SceneManager.GetActiveScene().name;
+        SceneFader.Instance.FadeToScene(current);
     }
 
     private void GoToMainMenu()
     {
         Time.timeScale = 1f;
-        SceneManager.LoadScene("MainMenu");
+        SceneFader.Instance.FadeToScene("MainMenu");
     }
-
-    void OnSceneLoaded(Scene s, LoadSceneMode m) {
-    gameOverPanel = GameObject.Find("GameOverPanel");
-    gameOverPanel.SetActive(false);
-}
-
 }

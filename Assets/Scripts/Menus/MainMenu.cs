@@ -1,5 +1,5 @@
-﻿using UnityEngine;
-using UnityEngine.SceneManagement;
+﻿// MainMenu.cs
+using UnityEngine;
 using TMPro;
 using System.Collections.Generic;
 
@@ -8,10 +8,9 @@ public class MainMenu : MonoBehaviour
     public GameObject mainMenuUI;
     public GameObject infoUI;
     public SettingsMenu settingsMenu;
-
     [SerializeField] private TextMeshProUGUI bestTimeText;
 
-    void Start()
+    private void Start()
     {
         ShowBestTime();
     }
@@ -19,13 +18,17 @@ public class MainMenu : MonoBehaviour
     public void StartGame()
     {
         CurrencyManager.Instance.ResetSessionCoins();
-        SceneManager.LoadScene("GameScene");
+        SceneFader.Instance.FadeToScene("GameScene");
+    }
+
+    public void OpenShop()
+    {
+        SceneFader.Instance.FadeToScene("ShopScene");
     }
 
     public void OpenSettings()
     {
         Debug.Log("Settings button clicked");
-
         if (settingsMenu != null)
         {
             settingsMenu.OpenSettings();
@@ -35,12 +38,6 @@ public class MainMenu : MonoBehaviour
         {
             Debug.LogWarning("SettingsMenu reference is missing!");
         }
-    }
-
-    public void QuitGame()
-    {
-        Debug.Log("Quit button clicked");
-        Application.Quit();
     }
 
     public void ShowInfoUI()
@@ -55,36 +52,27 @@ public class MainMenu : MonoBehaviour
         mainMenuUI.SetActive(true);
     }
 
-    public void OpenShop()
+    public void QuitGame()
     {
-        SceneManager.LoadScene("ShopScene");
+        Debug.Log("Quit button clicked");
+        Application.Quit();
     }
 
-    /// Resets all player progress: coins, best time, and shop unlocks.
     public void ResetProgress()
     {
-        // 1) Wipe saved coins
+        // clear saved data
         PlayerPrefs.DeleteKey("TotalCoins");
-
-        // 2) Wipe saved best time
         PlayerPrefs.DeleteKey("BestTime");
-
-        // 3) Wipe all shop unlock flags
         if (ShopManager.Instance != null)
         {
             foreach (var item in ShopManager.Instance.items)
                 PlayerPrefs.DeleteKey("Unlocked_" + item.id);
         }
-
-        // 4) Persist deletions
         PlayerPrefs.Save();
 
-        // 5) Reset in‑memory session coins
+        // reset session and UI
         CurrencyManager.Instance.ResetSessionCoins();
-
-        // 6) Update the best‑time display
         ShowBestTime();
-
         Debug.Log("Player progress has been reset.");
     }
 

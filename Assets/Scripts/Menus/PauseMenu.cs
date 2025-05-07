@@ -1,4 +1,6 @@
+// PauseMenu.cs
 using UnityEngine;
+using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 
 public class PauseMenu : MonoBehaviour
@@ -6,25 +8,29 @@ public class PauseMenu : MonoBehaviour
     [SerializeField] private GameObject pauseMenuUI;
     [SerializeField] private GameObject gameplayUI;
     [SerializeField] private GameObject settingsPanel; // Reference to the settings panel
+    [SerializeField] private Button mainMenuButton;    // assign this in inspector
 
     private bool isPaused = false;
+
+    void Start()
+    {
+        if (mainMenuButton != null)
+            mainMenuButton.onClick.AddListener(LoadMainMenu);
+    }
 
     void Update()
     {
         if (Input.GetKeyDown(KeyCode.Escape))
         {
-            if (isPaused)
-                Resume();
-            else
-                Pause();
+            if (isPaused) Resume();
+            else Pause();
         }
     }
 
     public void Resume()
     {
         pauseMenuUI.SetActive(false);
-        if (gameplayUI != null)
-            gameplayUI.SetActive(true);
+        gameplayUI?.SetActive(true);
         Time.timeScale = 1f;
         isPaused = false;
     }
@@ -32,8 +38,7 @@ public class PauseMenu : MonoBehaviour
     private void Pause()
     {
         pauseMenuUI.SetActive(true);
-        if (gameplayUI != null)
-            gameplayUI.SetActive(false); // Optionally hide gameplay UI
+        gameplayUI?.SetActive(false);
         Time.timeScale = 0f;
         isPaused = true;
     }
@@ -41,16 +46,15 @@ public class PauseMenu : MonoBehaviour
     public void LoadMainMenu()
     {
         Time.timeScale = 1f;
-        SceneManager.LoadScene("MainMenu");
+        SceneFader.Instance.FadeToScene("MainMenu");
     }
 
     public void CloseSettings()
     {
-        // Close the settings panel and return to the pause menu
         if (settingsPanel != null)
         {
             settingsPanel.SetActive(false);
-            pauseMenuUI.SetActive(true); // Show pause menu again
+            pauseMenuUI.SetActive(true);
         }
     }
 }

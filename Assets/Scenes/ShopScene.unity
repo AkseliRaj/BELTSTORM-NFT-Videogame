@@ -1122,6 +1122,7 @@ MonoBehaviour:
   priceText: {fileID: 120660263}
   buyButton: {fileID: 1922759700}
   buyButtonText: {fileID: 335334739}
+  backButton: {fileID: 134358569}
 --- !u!4 &1233835311
 Transform:
   m_ObjectHideFlags: 0

@@ -3,11 +3,15 @@ using System.Collections;
 
 public class PlayerMovement : MonoBehaviour
 {
+    [Header("Thrust Effect")]
+    public GameObject engineThrustPrefab;   // Prefab with 4-frame thrust animation
+    public Transform enginePoint;           // Empty child Transform at ship's engine location
+    public ParticleSystem engineParticles;  // Particle system for engine dust
+
     [Header("Movement Settings")]
     public float thrustForce = 300f;    // Force applied per second
     public float rotationSpeed = 200f;
     public float maxSpeed = 10f;
-    public ParticleSystem engineParticles;
 
     [Header("Dodge Settings")]
     public float dodgeForce = 20f;
@@ -25,28 +29,49 @@ public class PlayerMovement : MonoBehaviour
     private bool canDodge = true;
     private float thrustInput = 0f;
 
+    private GameObject engineThrustInstance;
+
     void Start()
     {
+        // Cache components
         rb = GetComponent<Rigidbody2D>();
         playerHealth = GetComponent<PlayerHealth>();
-
         if (rb == null) Debug.LogError("Rigidbody2D missing!");
         if (playerHealth == null) Debug.LogError("PlayerHealth missing!");
 
-        // Ensure you set Rigidbody2D.Linear Drag (e.g., 1f) in the Inspector for friction
+        // Instantiate the thrust animation prefab under the engine point
+        if (engineThrustPrefab != null && enginePoint != null)
+        {
+            engineThrustInstance = Instantiate(
+                engineThrustPrefab,
+                enginePoint.position,
+                enginePoint.rotation,
+                enginePoint
+            );
+            engineThrustInstance.SetActive(false);
+        }
 
+        // Calculate screen bounds based on camera
         Camera cam = Camera.main;
         Vector3 bottomLeft = cam.ViewportToWorldPoint(new Vector3(0, 0, cam.nearClipPlane));
-        Vector3 topRight = cam.ViewportToWorldPoint(new Vector3(1, 1, cam.nearClipPlane));
+        Vector3 topRight   = cam.ViewportToWorldPoint(new Vector3(1, 1, cam.nearClipPlane));
         screenBounds = new Vector2(topRight.x, topRight.y);
     }
 
     void Update()
     {
-        // Read thrust input in Update for responsiveness
+        // Read thrust input
         thrustInput = (!isDodging && Input.GetKey(KeyCode.W)) ? 1f : 0f;
 
-        // Handle engine particle effects
+        // Toggle thrust animation prefab
+        if (engineThrustInstance != null)
+        {
+            bool shouldBeActive = thrustInput > 0f;
+            if (engineThrustInstance.activeSelf != shouldBeActive)
+                engineThrustInstance.SetActive(shouldBeActive);
+        }
+
+        // Handle engine particle effects (dust)
         if (engineParticles != null)
         {
             if (thrustInput > 0f && !engineParticles.isPlaying)
@@ -55,30 +80,31 @@ public class PlayerMovement : MonoBehaviour
                 engineParticles.Stop();
         }
 
-        // Rotation
+        // Handle rotation
         if (!isDodging)
         {
             float rot = Input.GetAxisRaw("Horizontal");
             transform.Rotate(0, 0, -rot * rotationSpeed * Time.deltaTime);
         }
 
-        // Dodge
+        // Handle dodge input
         if (Input.GetMouseButtonDown(1) && canDodge)
             StartCoroutine(PerformDodge());
     }
 
     void FixedUpdate()
     {
-        if (!isDodging)
+        if (!isDodging && thrustInput > 0f)
         {
-            // Apply framerate-independent thrust
+            // Apply thrust force
             rb.AddForce(transform.up * thrustForce * thrustInput * Time.fixedDeltaTime,
                         ForceMode2D.Force);
-
-            // Clamp speed
-            rb.velocity = Vector2.ClampMagnitude(rb.velocity, maxSpeed);
         }
 
+        // Clamp maximum speed
+        rb.velocity = Vector2.ClampMagnitude(rb.velocity, maxSpeed);
+
+        // Keep the ship on-screen
         ClampPositionToScreen();
     }
 
@@ -104,21 +130,23 @@ public class PlayerMovement : MonoBehaviour
         isDodging = true;
         canDodge = false;
 
+        // Make player temporarily invincible
         if (playerHealth != null)
             playerHealth.SetInvincible(true);
 
-        Vector2 dodgeDir = transform.up;
-
+        // Clear velocity and add dodge impulse
         rb.velocity = Vector2.zero;
-        rb.AddForce(dodgeDir * dodgeForce, ForceMode2D.Impulse);
+        rb.AddForce(transform.up * dodgeForce, ForceMode2D.Impulse);
         PlayBoostSound();
 
+        // Wait for dodge duration
         yield return new WaitForSeconds(dodgeDuration);
 
         isDodging = false;
         if (playerHealth != null)
             playerHealth.SetInvincible(false);
 
+        // Wait for cooldown
         yield return new WaitForSeconds(dodgeCooldown);
         canDodge = true;
     }

@@ -2233,8 +2233,8 @@ MonoBehaviour:
     spawnWeight: 100
   spawnArea: {fileID: 995877764}
   starPrefab: {fileID: 285345251477774752, guid: 998163fce894a094da22d98d3bf992bd, type: 3}
-  minSpawnInterval: 0.1
-  maxSpawnInterval: 0.1
+  minSpawnInterval: 0.5
+  maxSpawnInterval: 0.5
   minRotationSpeed: -20
   maxRotationSpeed: 20
 --- !u!1 &1007936786

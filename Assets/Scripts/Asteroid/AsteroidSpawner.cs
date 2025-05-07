@@ -28,35 +28,60 @@ public class AsteroidSpawner : MonoBehaviour
         StartCoroutine(SpawnAsteroidsRoutine());
     }
 
-    IEnumerator SpawnAsteroidsRoutine()
+   IEnumerator SpawnAsteroidsRoutine()
     {
         while (playerCharacter != null)
         {
-            SpawnAsteroid();
-            float elapsed = timer != null ? timer.ElapsedTime : 0f;
+            // Compute in advance
+            Vector2 spawnPos = (Vector2)playerCharacter.position 
+                               + Random.insideUnitCircle.normalized * spawnRadius;
+            GameObject prefab = (Random.value < goldenChance)
+                ? goldenAsteroidPrefab
+                : normalAsteroidPrefab;
+
+            // Show indicator
+            IndicatorManager.Instance?.ShowIndicator(spawnPos);
+
+            // Wait a bit before actually spawning
+            yield return new WaitForSeconds(0.5f);
+
+            // Spawn it
+            GameObject asteroid = Instantiate(prefab, spawnPos, Quaternion.identity);
+            Vector2 dir = ((Vector2)playerCharacter.position - spawnPos).normalized;
+            asteroid.GetComponent<Rigidbody2D>().velocity = dir * asteroidSpeed;
+
+            // Then wait your spawnRate
+            float elapsed = timer?.ElapsedTime ?? 0f;
             float spawnRateMultiplier = Mathf.Clamp(1f - (elapsed / 240f), 0.5f, 1f);
-            float adjustedSpawnRate = baseSpawnRate * spawnRateMultiplier;
-            float speedIncrease = (elapsed / 60f) * 0.5f;
-            asteroidSpeed = baseAsteroidSpeed + speedIncrease;
-            yield return new WaitForSeconds(adjustedSpawnRate);
+            float adjusted = baseSpawnRate * spawnRateMultiplier;
+            float speedInc = (elapsed / 60f) * 0.5f;
+            asteroidSpeed = baseAsteroidSpeed + speedInc;
+            yield return new WaitForSeconds(adjusted);
         }
     }
 
-    void SpawnAsteroid()
+        void SpawnAsteroid()
     {
         if (playerCharacter == null) return;
 
-        // Decide which prefab to use
+        // Determine spawn position
+        Vector2 spawnPos = (Vector2)playerCharacter.position 
+                           + Random.insideUnitCircle.normalized * spawnRadius;
+
+        // Show the indicator:
+        if (IndicatorManager.Instance != null)
+            IndicatorManager.Instance.ShowIndicator(spawnPos);
+
+        // THEN spawn the asteroid as before:
         GameObject prefabToSpawn = (Random.value < goldenChance)
             ? goldenAsteroidPrefab
             : normalAsteroidPrefab;
 
-        Vector2 spawnPos = (Vector2)playerCharacter.position + Random.insideUnitCircle.normalized * spawnRadius;
         GameObject asteroid = Instantiate(prefabToSpawn, spawnPos, Quaternion.identity);
-
         Vector2 direction = ((Vector2)playerCharacter.position - spawnPos).normalized;
         Rigidbody2D rb = asteroid.GetComponent<Rigidbody2D>();
         if (rb != null)
             rb.velocity = direction * asteroidSpeed;
     }
+
 }
